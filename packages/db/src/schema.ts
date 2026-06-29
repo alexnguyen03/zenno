@@ -1,4 +1,5 @@
 import { pgTable, uuid, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core"
+import { randomUUID } from "crypto"
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
@@ -13,7 +14,8 @@ export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  avatarUrl: text("avatar_url"),
+  emailVerified: boolean("email_verified").notNull().default(false),
+  image: text("image"),
   role: workspaceRoleEnum("role").default("member").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -21,7 +23,7 @@ export const users = pgTable("users", {
 
 // Better Auth sessions table
 export const sessions = pgTable("sessions", {
-  id: text("id").primaryKey(),
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   token: text("token").notNull().unique(),
   expiresAt: timestamp("expires_at").notNull(),

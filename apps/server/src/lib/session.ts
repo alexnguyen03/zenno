@@ -1,7 +1,18 @@
 import type { Context, Next } from "hono"
+import type { Session } from "./auth.js"
 import { auth } from "./auth.js"
 
-export async function requireSession(c: Context, next: Next) {
+type Variables = {
+  user: Session["user"]
+  session: Session["session"]
+}
+
+export type { Variables }
+
+export async function requireSession(
+  c: Context<{ Variables: Variables }>,
+  next: Next
+) {
   const session = await auth.api.getSession({ headers: c.req.raw.headers })
   if (!session) {
     return c.json({ error: "Unauthorized" }, 401)

@@ -8,6 +8,13 @@
       "when": 1782631233340,
       "tag": "0000_jittery_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782716400000,
+      "tag": "0001_add_auth_fields",
+      "breakpoints": true
     }
   ]
 }
